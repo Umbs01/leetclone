@@ -18,7 +18,7 @@ function Playground() {
             extensions={extension} 
             onChange={onChange} 
             theme={vscodeDark} 
-            height={"calc(100vh - 44px);"}
+            height={"calc(100vh - 60px);"}
         />
     );
 }
