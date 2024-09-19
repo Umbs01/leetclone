@@ -1,24 +1,28 @@
-'use client'
+'use client';
 
-import React from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { python } from '@codemirror/lang-python';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-
-const extension = [python()];
+import Playground from "@/components/playground";
+import Button from "@/components/Button";
 
 function App() {
-  const [value, setValue] = React.useState("print('Hello World!')");
-  const onChange = React.useCallback((val, viewUpdate) => {
-    console.log('val:', val);
-    setValue(val);
-  }, []);
+  const handleClick = () => {
+    alert("button clicked");
+  }
   return (
-        <CodeMirror value={value} 
-            extensions={extension} 
-            onChange={onChange} 
-            theme={vscodeDark}
-            />
-    );
+    <div className="flex">
+      <div className="w-1/2 h-screen border border-border rounded">
+        <div className="flex justify-center items-center bg-primary text-primary-foreground space-x-3">
+          <Button extra="w-full" onClick={handleClick} label="Click me" varient="primary" size="md" />
+          <Button extra="w-full" onClick={handleClick} label="Hint" varient="primary" size="md" />
+          <Button extra="w-full" onClick={handleClick} label="Submit" varient="primary" size="md" />
+        </div>
+        <div style={{ height: "calc(  100vh - 44px)" }} className="overflow-scroll rounded">
+          <Playground />
+        </div>
+      </div>
+      <div className="w-0 h-screen border border-border flex-grow">
+        <a>a</a>
+      </div>
+    </div>
+  );
 }
 export default App;
