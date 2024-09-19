@@ -1,6 +1,9 @@
+import LoginCard from "@/components/login_card";
+
 export default function Page() {
-    return (<h1 className="text-3xl font-bold underline">
-        This is a login page
-        </h1>
-    );
-  }
+  return (
+    <div className="bg-slate-950 flex items-center justify-center min-h-screen">
+      <LoginCard />
+    </div>
+  );
+}
