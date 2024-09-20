@@ -28,7 +28,7 @@ export default function LoginCard() {
         alert("Login successful: " + data.message);
         console.log("success",data);
 
-        // get token from data and store it in local storage
+        // To do: Implement method token storage
 
       } else {
         const errorData = await response.json();
