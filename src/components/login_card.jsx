@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { Router, useRouter } from "next/router";
 
 export default function LoginCard() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      console.log(email, password)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(email, password)
 
     const requestBody = {
       email: email,
@@ -26,9 +27,13 @@ export default function LoginCard() {
       if (response.ok) {
         const data = await response.json();
         alert("Login successful: " + data.message);
-        console.log("success",data);
+        console.log("success", data);
 
-        // To do: Implement method token storage
+        // method for token storage
+        localStorage.setItem("token", data.token);
+
+        // To be redirected to next page (don't know the name yet)
+        // Router.push("/dashboard");
 
       } else {
         const errorData = await response.json();
@@ -40,7 +45,7 @@ export default function LoginCard() {
     }
   };
 
-    return (
+  return (
     <div className="w-full max-w-md mx-auto p-8 bg-white rounded-3xl">
       <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
       <form onSubmit={handleSubmit}>
@@ -74,5 +79,5 @@ export default function LoginCard() {
         <p className="text-center mt-4">Don&apos;t have an account? <Link href="/register" className="text-[#DF8E1D] font-bold">Sign up</Link></p>
       </div>
     </div>
-    );
+  );
 }
