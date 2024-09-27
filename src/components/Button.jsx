@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types"; // Optional: For prop validation
 
 const Button = ({ onClick, label, varient = "primary", size = "md", extra}) => {

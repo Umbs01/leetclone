@@ -1,6 +1,9 @@
+import ProblemSelect from "@/components/ProblemSelect";
+
 export default function Page() {
-    return (<h1 className="text-3xl font-bold underline">
-        This is a login page
-        </h1>
+    return (
+        <div className="mx-5 px-5 h-full">
+            <ProblemSelect name="Problem 1" difficulty="Easy" points="100" status="Solved" />
+        </div>
     );
   }

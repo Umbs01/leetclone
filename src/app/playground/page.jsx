@@ -2,6 +2,7 @@
 
 import Playground from "@/components/playground";
 import Button from "@/components/Button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function App() {
   const handleClick = () => {
@@ -15,12 +16,12 @@ function App() {
           <Button extra="w-full" onClick={handleClick} label="Hint" varient="primary" size="md" />
           <Button extra="w-full" onClick={handleClick} label="Submit" varient="primary" size="md" />
         </div>
-        <div style={{ height: "calc(100vh - 60px)" }} className="overflow-scroll rounded">
+        <div style={{ height: "calc(100vh - 58px)" }} className="overflow-scroll rounded">
           <Playground />
         </div>
       </div>
       <div className="w-0 h-screen border border-dark-grey border-l-gray-500 flex-grow">
-        <a>a</a>
+        
       </div>
     </div>
   );
