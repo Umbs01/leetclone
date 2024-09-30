@@ -1,6 +1,7 @@
 import logo from "../image/Logo.png";
 import Image from "next/image";
 import Theme from "../components/theme";
+import Link from 'next/link';
 
 const FirstNavbar = () => {
   return (
@@ -11,14 +12,14 @@ const FirstNavbar = () => {
         </div>
 
         <div className="float-end flex items-center space-x-4">
-            <a className="text-black hover:text-gray-500 dark:text-white dark:hover:text-gray-500" href="../practice"  >Practice</a>
+            <Link className="text-black hover:text-gray-500 dark:text-white dark:hover:text-gray-500" href="../practice"  >Practice</Link>
             <Theme />
 
             <button className="relative w-20 h-8 flex items-center justify-center border cursor-pointer rounded-full border-light_theme dark:border-dark_theme hover:bg-gray-500 ">
-                <a href="../login" className="text-black dark:text-white">Login</a>
+                <Link href="../login" className="text-black dark:text-white">Login</Link>
             </button>
             <button className="relative w-20 h-8 flex items-center justify-center dark:bg-dark_theme hover:dark:bg-dark_theme_click bg-light_theme  hover:bg-light_theme_click cursor-pointer rounded-full">
-                <a href="../register" className="text-black dark:text-white">Register</a>
+                <Link href="../register" className="text-black dark:text-white">Register</Link>
             </button>
         </div>
       </div>

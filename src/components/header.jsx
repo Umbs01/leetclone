@@ -3,7 +3,7 @@
 import Image from 'next/image'; 
 import Theme from "../components/theme";
 import { useEffect, useState } from "react";
-
+import Link from 'next/link';
 const Header = () => {
   const [name, setName] = useState("John");
   const [people, setPeople] = useState("/person.png"); 
@@ -19,8 +19,8 @@ const Header = () => {
   }, []);
 
   return (
-    <nav className="py-3 dark:bg-black w-full h-20 text-lightText sticky top-0">
-      <div className='h-full w-full mx-auto inline-flex items-center justify-between mdl:gap-3 px-4'>
+    <nav className="pt-5 dark:bg-black w-full h-40 text-lightText sticky -top-4 ">
+      <div className='h-full w-full mx-auto inline-flex items-center justify-between  px-4'>
         <div className="space-y-2 h-[70%] w-[60%]">
           <p className="font-syne text-6xl dark:text-white text-black">Welcome {name}!</p>
           <p className="font-syne text-xl dark:text-white text-black">Here is your Profile Dashboard</p>
