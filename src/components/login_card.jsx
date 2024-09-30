@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function LoginCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,14 +27,9 @@ export default function LoginCard() {
       });
       if (response.ok) {
         const data = await response.json();
-        alert("Login successful: " + data.message);
-        console.log("success", data);
-
-        // method for token storage
+        alert("Login successful: Redirecting to home page");
         localStorage.setItem("token", data.token);
-
-        // To be redirected to next page (don't know the name yet)
-        // Router.push("/dashboard");
+        router.push("/"); // Redirect to home page
 
       } else {
         const errorData = await response.json();
