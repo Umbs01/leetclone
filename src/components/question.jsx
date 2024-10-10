@@ -86,7 +86,7 @@ const QuestionComponent = () => {
     
         questionElements.push(
             <Link href={`/question/${question.name}`} key={question.name}>
-                <div className="question-block p-4 text-white bg-element rounded-3xl hover:bg-gray-100 transition duration-200 cursor-pointer mt-4">
+                <div className="question-block p-4 text-white bg-element rounded-3xl hover:bg-gray-500 transition duration-200 cursor-pointer mt-4">
                     <span className="ml-10 text-xl">{i + 1}</span>
                     <span className="ml-24 text-xl font-semibold">{question.name}</span>
                     <div className={`text-xl float-end ${statusClass}`}>{question.status}</div>
