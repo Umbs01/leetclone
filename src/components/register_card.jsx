@@ -66,6 +66,10 @@ export default function RegisterCard() {
           const data = await response.json();
           alert("Register successful: " + data.message);
           console.log("success", data);
+        } else {
+          const errorData = await response.json();
+          alert("Register failed: " + errorData.detail);
+          console.error("Register Error: ", errorData);
         }
       } catch (error) {
         console.error(error);
