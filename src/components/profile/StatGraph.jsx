@@ -1,3 +1,4 @@
+// Alternative to using react-chartjs-2
 // import { Bar } from "react-chartjs-2";
 // import {
 //   Chart as ChartJS,
@@ -54,6 +55,7 @@
 //   );
 // }
 
+// Use recharts
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 
 export default function StatGraph({ profile }) {
@@ -73,7 +75,7 @@ export default function StatGraph({ profile }) {
   ];
 
   const COLORS = {
-    Fundamental: '#3B82F6', // Blue
+    Fundamental: 'rgb(34 197 94)', // green
     Medium: '#F59E0B',      // Yellow/Orange
     Difficult: '#EF4444'    // Red
   };
@@ -81,7 +83,7 @@ export default function StatGraph({ profile }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
         <XAxis 
           dataKey="name" 
           tick={{ fill: '#9CA3AF' }}

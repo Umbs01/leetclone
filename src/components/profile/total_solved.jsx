@@ -9,9 +9,9 @@ export default function TotalSolved({ profile }) {
   return (
     <div className="flex justify-center items-center h-full">
       <div className="p-4 text-center">
-        <h3 className="text-xl font-semibold text-white">Total Solved</h3>
+        <h3 className="text-xl font-semibold dark:text-white">Total Solved</h3>
         <div className="mt-4">
-          <h1 className="text-6xl font-bold text-gray-100">{totalSolved}</h1>
+          <h1 className="text-6xl font-bold dark:text-gray-100">{totalSolved}</h1>
         </div>
       </div>
     </div>
