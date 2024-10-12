@@ -13,7 +13,11 @@
     "@codemirror/lang-python": "^6.1.6",
     "@uiw/codemirror-theme-vscode": "^4.23.2",
     "@uiw/react-codemirror": "^4.23.2",
+<<<<<<< HEAD
     "chart.js": "^4.4.4",
+=======
+    "axios": "^1.7.7",
+>>>>>>> main
     "next": "14.2.7",
     "next-themes": "^0.3.0",
     "react": "^18",

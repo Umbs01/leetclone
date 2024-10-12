@@ -9,6 +9,10 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: 'class',
+  fundametal: "Fundametal",
+  medium: 'Medium',
+  difficult: 'Difficult',
+
   theme: {
     extend: {
       fontFamily: {
@@ -26,6 +30,7 @@ module.exports = {
         dark_theme: "#d08d2d",
         dark_theme_click: "#df8e1d",
         grey:"#BABABA",
+        element:"#575758"
       },
     },
   },
