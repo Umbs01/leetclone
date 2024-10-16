@@ -7,8 +7,9 @@ import StatGraph from "@/components/profile/StatGraph";
 import TotalSolved from "@/components/profile/total_solved";
 import Score from "@/components/profile/score";
 import Diff_solved from "@/components/profile/diff_solved";
+import withAuth from "../../hoc/withAuth";
 
-export default function Profile() {
+function Profile() {
   const [profile, setProfile] = useState({
     username: "Loading...",
     email: "",
@@ -127,3 +128,5 @@ export default function Profile() {
     </div>
   );
 }
+
+export default withAuth(Profile);

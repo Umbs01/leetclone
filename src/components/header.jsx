@@ -4,8 +4,11 @@ import Image from 'next/image';
 import Theme from "../components/theme";
 import { useEffect, useState } from "react";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 
 const Header = () => {
+  const router = useRouter();
   const [name, setName] = useState("John");
   const [people, setPeople] = useState("/person.png");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -22,6 +25,14 @@ const Header = () => {
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    console.log("Logged out!");
+    alert("Logged out!");
+
+    router.push("/landing");
   };
 
   return (
@@ -48,8 +59,8 @@ const Header = () => {
                   <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
                     <Link href="/profile">Profile</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                    <Link href="/logout">Logout</Link>
+                  <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={handleLogout}>
+                    Logout
                   </li>
                 </ul>
               </div>
