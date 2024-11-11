@@ -8,6 +8,7 @@ import TotalSolved from "@/components/profile/total_solved";
 import Score from "@/components/profile/score";
 import Diff_solved from "@/components/profile/diff_solved";
 import withAuth from "../../hoc/withAuth";
+import { jwtDecode } from "jwt-decode";
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -23,27 +24,67 @@ function Profile() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // useEffect(() => {
+  //   const fetchProfileData = async () => {
+  //     try {
+  //       // sample data
+  //       const data = {
+  //         username: "Arhway2000",
+  //         email: "Arhway2000@gmail.com",
+  //         solved: {
+  //           fundamental: 7,
+  //           medium: 12,
+  //           difficult: 3,
+  //         },
+  //         score: 1500,
+  //       };
+  //       setProfile(data);
+  //     } catch (error) {
+  //       console.error("Error fetching profile data", error);
+  //     }
+  //   };
+  //   fetchProfileData();
+  // }, []);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        // sample data
-        const data = {
-          username: "Arhway2000",
-          email: "Arhway2000@gmail.com",
-          solved: {
-            fundamental: 7,
-            medium: 12,
-            difficult: 3,
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const decoded = jwtDecode(token);
+        const student_id = decoded.student_id;
+
+        const response = await fetch(`http://161.246.5.48:3777/user/${student_id}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type" : "application/json"
           },
-          score: 1500,
-        };
-        setProfile(data);
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+        const data = await response.json();
+
+        setProfile({
+          username: data.username || "N/A",
+          email: data.email || "N/A",
+          solved: {
+            fundamental: data.solved_problems.filter((problem) => problem.difficulty === "fundamental").length,
+            medium: data.solved_problems.filter((problem) => problem.difficulty === "medium").length,
+            difficult: data.solved_problems.filter((problem) => problem.difficulty === "difficult").length,
+          },
+          score: data.score || 0,
+        });
       } catch (error) {
         console.error("Error fetching profile data", error);
       }
     };
-    fetchProfileData();
-  }, []);
+      fetchProfileData();
+    }, []);
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50 dark:bg-gray-950">
