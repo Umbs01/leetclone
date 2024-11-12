@@ -1,6 +1,7 @@
-"use client"; 
+// Header.js
+'use client';
 
-import Image from 'next/image'; 
+import Image from 'next/image';
 import Theme from "../components/theme";
 import { useEffect, useState } from "react";
 import Link from 'next/link';
@@ -25,7 +26,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="dark:bg-black bg-white w-full h-40 text-lightText sticky -top-4 ">
+    <nav className="dark:bg-black bg-white w-full h-40 text-lightText sticky top-0 z-50"> {/* Added top-0 and z-50 for layering */}
       <div className='h-full w-full mx-auto inline-flex items-center justify-between px-4'>
         <div className="space-y-2 h-[70%] w-[60%]">
           <p className="font-syne text-6xl dark:text-white text-black">Welcome {name}!</p>
