@@ -127,7 +127,7 @@ const QuestionComponent = ({ studentId }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/users/${studentId}`);
+        const response = await fetch(`http://161.246.5.48:3777/users/${studentId}`);
         const data = await response.json();
         setSolvedProblems(data.solved_problems || []);
       } catch (error) {
