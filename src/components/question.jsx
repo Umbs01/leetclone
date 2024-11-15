@@ -10,7 +10,7 @@ const QuestionComponent = ({ studentId }) => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://161.246.5.48:3777/questions/");
+        const response = await fetch("http://161.246.5.48:3777/problems/");
         {
           if (!response.ok) {
             throw new Error("Failed to fetch questions");
