@@ -24,28 +24,6 @@ function Profile() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchProfileData = async () => {
-  //     try {
-  //       // sample data
-  //       const data = {
-  //         username: "Arhway2000",
-  //         email: "Arhway2000@gmail.com",
-  //         solved: {
-  //           fundamental: 7,
-  //           medium: 12,
-  //           difficult: 3,
-  //         },
-  //         score: 1500,
-  //       };
-  //       setProfile(data);
-  //     } catch (error) {
-  //       console.error("Error fetching profile data", error);
-  //     }
-  //   };
-  //   fetchProfileData();
-  // }, []);
-
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -55,9 +33,9 @@ function Profile() {
         }
 
         const decoded = jwtDecode(token);
-        const student_id = decoded.student_id;
+        const student_id = decoded.sub;
 
-        const response = await fetch(`http://161.246.5.48:3777/user/${student_id}`, {
+        const response = await fetch(`http://161.246.5.48:3777/users/${student_id}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type" : "application/json"
@@ -73,9 +51,9 @@ function Profile() {
           username: data.username || "N/A",
           email: data.email || "N/A",
           solved: {
-            fundamental: data.solved_problems.filter((problem) => problem.difficulty === "fundamental").length,
+            fundamental: data.solved_problems.filter((problem) => problem.difficulty === "easy").length,
             medium: data.solved_problems.filter((problem) => problem.difficulty === "medium").length,
-            difficult: data.solved_problems.filter((problem) => problem.difficulty === "difficult").length,
+            difficult: data.solved_problems.filter((problem) => problem.difficulty === "hard").length,
           },
           score: data.score || 0,
         });

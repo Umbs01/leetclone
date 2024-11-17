@@ -5,6 +5,7 @@ import Theme from "../components/theme";
 import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
 
 
 const Header = () => {
@@ -13,11 +14,17 @@ const Header = () => {
   const [people, setPeople] = useState("/person.png");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // Decode the token to get the student ID
+  const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
+  const student_id = decoded.sub;
+
+  // Fetch user data
   useEffect(() => {
-    fetch('http://localhost:8000/user') //wait api
+    fetch(`http://161.246.5.48:3777/users/${student_id}`) 
       .then((response) => response.json())
       .then((data) => {
-        setName(data.name);
+        setName(data.username);
         setPeople(data.people);
       })
       .catch((error) => console.error('Error fetching user data:', error));
@@ -51,7 +58,7 @@ const Header = () => {
             onMouseEnter={toggleDropdown} 
             onMouseLeave={toggleDropdown}
           >
-            <Image src={people} alt="User" width={50} height={50} className='rounded-full' />
+            <Image src={people || "/person.png"} alt="User" width={50} height={50} className='rounded-full' />
 
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">

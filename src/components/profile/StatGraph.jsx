@@ -61,7 +61,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Toolti
 export default function StatGraph({ profile }) {
   const data = [
     { 
-      name: 'Fundamental',
+      name: 'Easy',
       Problems: profile.solved.fundamental,
     },
     { 
@@ -69,15 +69,15 @@ export default function StatGraph({ profile }) {
       Problems: profile.solved.medium,
     },
     { 
-      name: 'Difficult',
+      name: 'Hard',
       Problems: profile.solved.difficult,
     },
   ];
 
   const COLORS = {
-    Fundamental: 'rgb(34 197 94)', // green
+    Easy: 'rgb(34 197 94)', // green
     Medium: '#F59E0B',      // Yellow/Orange
-    Difficult: '#EF4444'    // Red
+    Hard: '#EF4444'    // Red
   };
 
   return (
