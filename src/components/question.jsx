@@ -26,102 +26,102 @@ const QuestionComponent = ({ studentId }) => {
   }, []);
 
   // Sample data for testing
-  useEffect(() => {
-    const sampleQuestions = [
-      {
-        id: "1",
-        title: "What is the time complexity of binary search?",
-        difficulty: "easy",
-        points: 10,
-      },
-      {
-        id: "2",
-        title: "Explain the difference between HTTP and HTTPS.",
-        difficulty: "medium",
-        points: 20,
-      },
-      {
-        id: "3",
-        title: "Implement a solution for the Travelling Salesman Problem.",
-        difficulty: "hard",
-        points: 50,
-      },
-      {
-        id: "4",
-        title: "Describe the role of DNS in the internet architecture.",
-        difficulty: "medium",
-        points: 15,
-      },
-      {
-        id: "5",
-        title: "What is a hash function and how is it used in blockchain?",
-        difficulty: "easy",
-        points: 25,
-      },
-      {
-        id: "6",
-        title: "Explain the concept of a linked list.",
-        difficulty: "easy",
-        points: 10,
-      },
-      {
-        id: "7",
-        title: "What is the difference between a stack and a queue?",
-        difficulty: "medium",
-        points: 20,
-      },
-      {
-        id: "8",
-        title: "Implement a solution",
-        difficulty: "hard",
-        points: 50,
-      },
-      {
-        id: "9",
-        title: "Describe the role of DNS",
-        difficulty: "medium",
-        points: 15,
-      },
-      {
-        id: "10",
-        title: "What is a hash function",
-        difficulty: "easy",
-        points: 25,
-      },
-      {
-        id: "11",
-        title: "Explain the concept of a linked list",
-        difficulty: "easy",
-        points: 10,
-      },
-      {
-        id: "12",
-        title: "What is the difference between a stack and a queue",
-        difficulty: "medium",
-        points: 20,
-      },
-      {
-        id: "13",
-        title: "Implement a solution",
-        difficulty: "hard",
-        points: 50,
-      },
-      {
-        id: "14",
-        title: "Describe the role of DNS",
-        difficulty: "medium",
-        points: 15,
-      },
-      {
-        id: "15",
-        title: "What is a hash function",
-        difficulty: "easy",
-        points: 25,
-      },
-    ];
+  // useEffect(() => {
+  //   const sampleQuestions = [
+  //     {
+  //       id: "1",
+  //       title: "What is the time complexity of binary search?",
+  //       difficulty: "easy",
+  //       points: 10,
+  //     },
+  //     {
+  //       id: "2",
+  //       title: "Explain the difference between HTTP and HTTPS.",
+  //       difficulty: "medium",
+  //       points: 20,
+  //     },
+  //     {
+  //       id: "3",
+  //       title: "Implement a solution for the Travelling Salesman Problem.",
+  //       difficulty: "hard",
+  //       points: 50,
+  //     },
+  //     {
+  //       id: "4",
+  //       title: "Describe the role of DNS in the internet architecture.",
+  //       difficulty: "medium",
+  //       points: 15,
+  //     },
+  //     {
+  //       id: "5",
+  //       title: "What is a hash function and how is it used in blockchain?",
+  //       difficulty: "easy",
+  //       points: 25,
+  //     },
+  //     {
+  //       id: "6",
+  //       title: "Explain the concept of a linked list.",
+  //       difficulty: "easy",
+  //       points: 10,
+  //     },
+  //     {
+  //       id: "7",
+  //       title: "What is the difference between a stack and a queue?",
+  //       difficulty: "medium",
+  //       points: 20,
+  //     },
+  //     {
+  //       id: "8",
+  //       title: "Implement a solution",
+  //       difficulty: "hard",
+  //       points: 50,
+  //     },
+  //     {
+  //       id: "9",
+  //       title: "Describe the role of DNS",
+  //       difficulty: "medium",
+  //       points: 15,
+  //     },
+  //     {
+  //       id: "10",
+  //       title: "What is a hash function",
+  //       difficulty: "easy",
+  //       points: 25,
+  //     },
+  //     {
+  //       id: "11",
+  //       title: "Explain the concept of a linked list",
+  //       difficulty: "easy",
+  //       points: 10,
+  //     },
+  //     {
+  //       id: "12",
+  //       title: "What is the difference between a stack and a queue",
+  //       difficulty: "medium",
+  //       points: 20,
+  //     },
+  //     {
+  //       id: "13",
+  //       title: "Implement a solution",
+  //       difficulty: "hard",
+  //       points: 50,
+  //     },
+  //     {
+  //       id: "14",
+  //       title: "Describe the role of DNS",
+  //       difficulty: "medium",
+  //       points: 15,
+  //     },
+  //     {
+  //       id: "15",
+  //       title: "What is a hash function",
+  //       difficulty: "easy",
+  //       points: 25,
+  //     },
+  //   ];
 
-    setQuestions(sampleQuestions);
-  }, []);
+  //   setQuestions(sampleQuestions);
+  // }, []);
 
   // Fetch user data from the server
   useEffect(() => {
