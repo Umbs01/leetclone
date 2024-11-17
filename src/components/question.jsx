@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { jwtDecode } from "jwt-decode";
 
-const QuestionComponent = ({ studentId }) => {
+const QuestionComponent = () => {
   const [questions, setQuestions] = useState([]);
   const [solvedProblems, setSolvedProblems] = useState([]);
 
@@ -127,16 +128,28 @@ const QuestionComponent = ({ studentId }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://161.246.5.48:3777/users/${studentId}`);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+        const decoded = jwtDecode(token);
+        const student_id = decoded.sub;
+
+        const response = await fetch(`http://161.246.5.48:3777/users/${student_id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
         const data = await response.json();
         setSolvedProblems(data.solved_problems || []);
+
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
     fetchUserData();
-  }, [studentId]);
+  }, []);
 
   const questionElements = questions.map((question, index) => {
     const longTitle =

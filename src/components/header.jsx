@@ -14,20 +14,27 @@ const Header = () => {
   const [people, setPeople] = useState("/person.png");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Decode the token to get the student ID
-  const token = localStorage.getItem("token");
-  const decoded = jwtDecode(token);
-  const student_id = decoded.sub;
-
   // Fetch user data
   useEffect(() => {
-    fetch(`http://161.246.5.48:3777/users/${student_id}`) 
-      .then((response) => response.json())
-      .then((data) => {
-        setName(data.username);
-        setPeople(data.people);
-      })
-      .catch((error) => console.error('Error fetching user data:', error));
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const student_id = decoded.sub;
+
+        fetch(`http://161.246.5.48:3777/users/${student_id}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setName(data.username || "John");
+            setPeople(data.people || "/person.png"); // Fallback to default
+          })
+          .catch((error) => console.error("Error fetching user data:", error));
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
+    } else {
+      console.error("Token not found");
+    }
   }, []);
 
   const toggleDropdown = () => {
