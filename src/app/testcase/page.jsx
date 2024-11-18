@@ -13,28 +13,38 @@ async function submitProblem(descriptionData, testcaseData) {
     // Transform testcaseData to required format
     const formattedTestCases = testcaseData
       .filter(test => test.input && test.output) // Only include non-empty test cases
-      .map(test => `${test.input}\n${test.output}`);
+      .map(test => ({
+        input: test.input,
+        output: test.output
+      }));
 
     // Construct the problem data object
     const problemData = {
       title: descriptionData.title || '',
       description: descriptionData.description || '',
-      difficulty: descriptionData.selectedTag || 'easy', 
+      difficulty: descriptionData.selectedTag || 'easy',
       points: parseInt(descriptionData.point) || 0,
       hint: "", 
-      tags: [], 
-      hint_cost: 0, 
+      tags: [""], 
+      hint_cost: 0,
       test_cases: formattedTestCases,
-      input_format: descriptionData.input_format || '',
-      output_format: descriptionData.output_format || '',
-      author: "", 
-      status: "active", 
-      solves: 0, 
-      hidden_test_cases: [], 
+      input_format: descriptionData.input_format || 'string',
+      output_format: descriptionData.output_format || 'string',
+      author: "", //implement how to get author (student_id) 
+      status: "",
+      solves: 0,
+      hidden_test_cases: [{}],
       solution: "", 
-      template: "", 
-      starter: "" 
+      template: "",
+      starter: ""
     };
+
+    // for debugging
+    console.log('Description Data:', descriptionData);
+    console.log('Test Case Data:', testcaseData);
+    console.log('Formatted Test Cases:', formattedTestCases);
+    console.log('Full Request Body:', JSON.stringify(problemData, null, 2));
+
 
     const response = await fetch('http://161.246.5.48:3777/problems/create', {
       method: 'POST',
@@ -65,7 +75,8 @@ function TestCase() {
     selectedTag: "easy",
     point: 0,
     input_format: "",
-    output_format: ""
+    output_format: "",
+    solution: ""
   });
   const [testcaseData, setTestcaseData] = useState(Array(5).fill({ input: '', output: '' }));
 
@@ -73,8 +84,10 @@ function TestCase() {
     try {
       const result = await submitProblem(descriptionData, testcaseData);
       console.log('Problem created successfully:', result);
+      alert('Problem created successfully!');
     } catch (error) {
       console.error('Failed to create problem:', error);
+      alert('Failed to create problem.' + error.message);
     }
   };
 
@@ -110,9 +123,9 @@ function TestCase() {
               <TabsList className="flex justify-center pt-5 pr-2">
                 <TabsTrigger className="w-1/3 h-10" value="details">Description</TabsTrigger>
                 <TabsTrigger className="w-1/3 h-10" value="testcases">+ Add Test Case</TabsTrigger>
-                <button 
-                onClick={handleSubmit}
-                className="w-1/3 h-10 py-2 px-4 rounded-lg bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme">
+                <button
+                  onClick={handleSubmit}
+                  className="w-1/3 h-10 py-2 px-4 rounded-lg bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme">
                   Submit
                 </button>
               </TabsList>
