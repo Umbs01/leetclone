@@ -6,20 +6,78 @@ import Sidebar from "@/components/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TestcaseAdd from "@/components/questiondata/TestcaseAdd";
 import TestcaseDescription from "@/components/questiondata/TestcaseDescription";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
-async function submitProblem(descriptionData, testcaseData, solution) {
+export const useProblemFormValidation = (descriptionData, testcaseData, solutionCode) => {
+  const [errors, setErrors] = useState({});
+  const [showErrors, setShowErrors] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate Description Data
+    if (!descriptionData.title.trim()) {
+      newErrors.title = 'Problem title is required';
+    }
+
+    if (!descriptionData.description.trim()) {
+      newErrors.description = 'Problem description is required';
+    }
+
+    if (!descriptionData.point || descriptionData.point <= 0) {
+      newErrors.point = 'Points must be a positive number';
+    }
+
+    if (!descriptionData.input_format.trim()) {
+      newErrors.input_format = 'Input format description is required';
+    }
+
+    if (!descriptionData.output_format.trim()) {
+      newErrors.output_format = 'Output format description is required';
+    }
+
+    // Validate at least one valid test case
+    const validTestcases = testcaseData.filter(
+      (test) => test.input.trim() && test.output.trim()
+    );
+
+    if (validTestcases.length === 0) {
+      newErrors.testcases = 'At least one test case with input and output is required';
+    }
+
+    // Validate Solution Code
+    if (!solutionCode.trim()) {
+      newErrors.solution = 'Solution code is required';
+    }
+
+    return newErrors;
+  };
+
+  const triggerValidation = () => {
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+    setShowErrors(true);
+    return Object.keys(validationErrors).length === 0;
+  };
+
+  return { 
+    errors, 
+    showErrors, 
+    triggerValidation,
+    isValid: Object.keys(validateForm()).length === 0
+  };
+};
+
+export const submitProblem = async (descriptionData, testcaseData, solution) => {
   try {
-    // Transform testcaseData to required format
     const formattedTestCases = testcaseData
-      .filter(test => test.input && test.output) // Only include non-empty test cases
+      .filter(test => test.input && test.output)
       .map(test => ({
         input: test.input,
         output: test.output
       }));
 
-    // Get student_id from token
     const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("No token found");
@@ -27,7 +85,6 @@ async function submitProblem(descriptionData, testcaseData, solution) {
     const decoded = jwtDecode(token);
     const student_id = decoded.sub;
     
-    // Construct the problem data object
     const problemData = {
       title: descriptionData.title || '',
       description: descriptionData.description || '',
@@ -39,7 +96,7 @@ async function submitProblem(descriptionData, testcaseData, solution) {
       test_cases: formattedTestCases,
       input_format: descriptionData.input_format || 'string',
       output_format: descriptionData.output_format || 'string',
-      author: student_id, //implement how to get author (student_id) 
+      author: student_id,
       status: "",
       solves: 0,
       hidden_test_cases: [{}],
@@ -47,14 +104,6 @@ async function submitProblem(descriptionData, testcaseData, solution) {
       template: "",
       starter: ""
     };
-
-    // for debugging
-    console.log('Description Data:', descriptionData);
-    console.log('Test Case Data:', testcaseData);
-    console.log('Solution:', solution);
-    console.log('Formatted Test Cases:', formattedTestCases);
-    console.log('Full Request Body:', JSON.stringify(problemData, null, 2));
-
 
     const response = await fetch('http://161.246.5.48:3777/problems/create', {
       method: 'POST',
@@ -68,17 +117,32 @@ async function submitProblem(descriptionData, testcaseData, solution) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const result = await response.json();
-    return result;
+    return await response.json();
 
   } catch (error) {
     console.error('Error submitting problem:', error);
     throw error;
   }
-}
+};
 
+// Error Display Component
+const ErrorDisplay = ({ errors, show }) => {
+  if (!show || Object.keys(errors).length === 0) return null;
+
+  return (
+    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <strong className="font-bold">Please fix the following errors:</strong>
+      <ul className="mt-2">
+        {Object.entries(errors).map(([key, message]) => (
+          <li key={key} className="ml-4 list-disc">{message}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// Example Usage in Page Component
 function TestCase() {
-  // const [descriptionData, setDescriptionData] = useState(""); // State for Description tab
   const [descriptionData, setDescriptionData] = useState({
     title: "",
     description: "",
@@ -90,14 +154,24 @@ function TestCase() {
   const [testcaseData, setTestcaseData] = useState(Array(5).fill({ input: '', output: '' }));
   const [solutionCode, setSolutionCode] = useState("");
 
+  const { 
+    errors, 
+    showErrors, 
+    triggerValidation 
+  } = useProblemFormValidation(descriptionData, testcaseData, solutionCode);
+
   const handleSubmit = async () => {
-    try {
-      const result = await submitProblem(descriptionData, testcaseData, solutionCode);
-      console.log('Problem created successfully:', result);
-      alert('Problem created successfully!');
-    } catch (error) {
-      console.error('Failed to create problem:', error);
-      alert('Failed to create problem.' + error.message);
+    if (triggerValidation()) {
+      try {
+        const result = await submitProblem(descriptionData, testcaseData, solutionCode);
+        console.log('Problem created successfully:', result);
+        alert('Problem created successfully!');
+      } catch (error) {
+        console.error('Failed to create problem:', error);
+        alert('Failed to create problem: ' + error.message);
+      } 
+    } else {
+      alert('Please fix form errors before submitting');
     }
   };
 
@@ -154,6 +228,7 @@ function TestCase() {
                     setTestcaseData={setTestcaseData}
                   />
                 </TabsContent>
+                <ErrorDisplay errors={errors} show={showErrors} />
               </div>
             </Tabs>
           </div>
