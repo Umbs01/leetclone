@@ -79,7 +79,7 @@ function TestcaseDescription({ descriptionData, setDescriptionData }) {
               <input
                 id="point"
                 name="point"
-                type='number'
+                type="number"
                 value={descriptionData.point}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
@@ -99,6 +99,34 @@ function TestcaseDescription({ descriptionData, setDescriptionData }) {
                 rows="4"
                 className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
                 placeholder="Enter description here..."
+              />
+            </div>
+            <div className="w-2/3 pl-2 mt-4">
+              <label htmlFor="input_description" className="font-bold">
+                Input Description:
+              </label>
+              <textarea
+                name="input_format"
+                id="input_description"
+                value={descriptionData.input_format}
+                onChange={handleChange}
+                rows="2"
+                className="w-full border border-grey-300 rounded p-2 mt-2 text-black"
+                placeholder="Enter input description here..."
+              />
+            </div>
+            <div className="w-2/3 pl-2 mt-4">
+              <label htmlFor="output_description" className="font-bold">
+                Output Description:
+              </label>
+              <textarea
+                name="output_format"
+                id="output_description"
+                value={descriptionData.output_format}
+                onChange={handleChange}
+                rows="2"
+                className="w-full border border-grey-300 rounded p-2 mt-2 text-black"
+                placeholder="Enter output description here..."
               />
             </div>
           </div>
