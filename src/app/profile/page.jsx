@@ -35,7 +35,7 @@ function Profile() {
         const decoded = jwtDecode(token);
         const student_id = decoded.sub;
 
-        const response = await fetch(`http://161.246.5.48:3777/users/${student_id}`, {
+        const response = await fetch(`http://161.246.5.48:3777/users/${student_id}?token=${token}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type" : "application/json"

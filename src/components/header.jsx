@@ -11,7 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const Header = () => {
   const router = useRouter();
-  const [name, setName] = useState("John");
+  const [name, setName] = useState("");
   const [people, setPeople] = useState("/person.png");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -23,10 +23,10 @@ const Header = () => {
         const decoded = jwtDecode(token);
         const student_id = decoded.sub;
 
-        fetch(`http://161.246.5.48:3777/users/${student_id}`)
+        fetch(`http://161.246.5.48:3777/users/${student_id}?token=${token}`)
           .then((response) => response.json())
           .then((data) => {
-            setName(data.username || "John");
+            setName(data.username);
             setPeople(data.people || "/person.png"); // Fallback to default
           })
           .catch((error) => console.error("Error fetching user data:", error));
