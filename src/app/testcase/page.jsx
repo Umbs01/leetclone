@@ -7,8 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TestcaseAdd from "@/components/questiondata/TestcaseAdd";
 import TestcaseDescription from "@/components/questiondata/TestcaseDescription";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
-async function submitProblem(descriptionData, testcaseData) {
+async function submitProblem(descriptionData, testcaseData, solution) {
   try {
     // Transform testcaseData to required format
     const formattedTestCases = testcaseData
@@ -18,23 +19,31 @@ async function submitProblem(descriptionData, testcaseData) {
         output: test.output
       }));
 
+    // Get student_id from token
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found");
+    }
+    const decoded = jwtDecode(token);
+    const student_id = decoded.sub;
+    
     // Construct the problem data object
     const problemData = {
       title: descriptionData.title || '',
       description: descriptionData.description || '',
       difficulty: descriptionData.selectedTag || 'easy',
       points: parseInt(descriptionData.point) || 0,
-      hint: "", 
-      tags: [""], 
+      hint: "",
+      tags: [""],
       hint_cost: 0,
       test_cases: formattedTestCases,
       input_format: descriptionData.input_format || 'string',
       output_format: descriptionData.output_format || 'string',
-      author: "", //implement how to get author (student_id) 
+      author: student_id, //implement how to get author (student_id) 
       status: "",
       solves: 0,
       hidden_test_cases: [{}],
-      solution: "", 
+      solution: solution,
       template: "",
       starter: ""
     };
@@ -42,6 +51,7 @@ async function submitProblem(descriptionData, testcaseData) {
     // for debugging
     console.log('Description Data:', descriptionData);
     console.log('Test Case Data:', testcaseData);
+    console.log('Solution:', solution);
     console.log('Formatted Test Cases:', formattedTestCases);
     console.log('Full Request Body:', JSON.stringify(problemData, null, 2));
 
@@ -76,13 +86,13 @@ function TestCase() {
     point: 0,
     input_format: "",
     output_format: "",
-    solution: ""
   });
   const [testcaseData, setTestcaseData] = useState(Array(5).fill({ input: '', output: '' }));
+  const [solutionCode, setSolutionCode] = useState("");
 
   const handleSubmit = async () => {
     try {
-      const result = await submitProblem(descriptionData, testcaseData);
+      const result = await submitProblem(descriptionData, testcaseData, solutionCode);
       console.log('Problem created successfully:', result);
       alert('Problem created successfully!');
     } catch (error) {
@@ -113,7 +123,9 @@ function TestCase() {
               </div>
             </div>
             <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
-              <Playground />
+              <Playground
+                onCodeChange={(code) => setSolutionCode(code)}
+              />
             </div>
           </div>
 

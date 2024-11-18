@@ -10,7 +10,8 @@ function Playground() {
     const onChange = useCallback((val, viewUpdate) => {
       console.log('val:', val);
       setValue(val);
-    }, []);
+      onCodeChange(val);
+    }, [onCodeChange]);
     
     return (
         <CodeMirror 
