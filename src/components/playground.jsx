@@ -5,7 +5,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
 const extension = [python()];
 
-function Playground() {
+function Playground({onCodeChange}) {
     const [value, setValue] = useState("print('Hello World!')");
     const onChange = useCallback((val, viewUpdate) => {
       console.log('val:', val);
