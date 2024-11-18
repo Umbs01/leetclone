@@ -1,6 +1,6 @@
 import FirstNavbar from "@/components/firstnavbar";
 import Image from "next/image";
-import page_logo from "/public/Next.js.png";
+import page_logo from "/public/Python.png";
 import Link from "next/link";
 
 export default function Page() {
@@ -8,7 +8,7 @@ export default function Page() {
     <div className="dark:bg-slate-950 bg-white flex-col flex min-h-screen">
       <FirstNavbar />
       <div className="flex-auto flex items-center justify-center flex-col">
-        <Image src={page_logo} width={500} height={500} alt="Logo image" />
+        <Image src={page_logo} width={600} height={600} alt="Logo image" />
         <p className="text-black dark:text-white">
           Welcome to SE coding platform!
         </p>
