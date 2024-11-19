@@ -187,13 +187,7 @@ const QuestionComponent = () => {
       //   </div>
       // </Link>
       <Link href={{
-        pathname: '/test',
-        query: {
-            id: question.id,
-            name: question.title,
-            point: question.points,
-            level: question.difficulty,
-        },
+        pathname: `/${question.id}`,
       }}
       key={question.name}
       >

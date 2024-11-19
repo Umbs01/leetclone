@@ -1,7 +1,8 @@
-"use client"; 
+"use client";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { jwtDecode } from "jwt-decode";
 
 // Dynamically import components (avoiding SSR issues)
 const Playground = dynamic(() => import("@/components/playground"), { ssr: false });
@@ -35,7 +36,7 @@ function Test({ params }) {
     // Fetch problem data from the API
     async function fetchProblemData() {
       try {
-        const response = await fetch(`http://10.69.0.11:4000/problems/${problemId}`);
+        const response = await fetch(`http://161.246.5.48:3777/problems/${problemId}`);
         if (!response.ok) {
           throw new Error(`Error fetching problem: ${response.status}`);
         }
@@ -60,7 +61,7 @@ function Test({ params }) {
 
   async function handleRunCode() {
     try {
-      const res = await fetch(`http://10.69.0.11:4000/run-code/${problemId}`, {
+      const res = await fetch(`http://161.246.5.48:3777/run-code/${problemId}`, {
         method: "POST",
         body: JSON.stringify({ test_cases: problemData.test_cases, code: code }),
         headers: {
@@ -86,18 +87,15 @@ function Test({ params }) {
       throw new Error("Token not found");
     }
     try {
-      const res = await fetch(`http://10.69.0.11:4000/problems/hint/${problemId}`, {
+      const res = await fetch(`http://161.246.5.48:3777/problems/hint/${problemId}/?token=${token}`, {
         method: "POST",
-        queryParams: {
-          token: token,
-        },
         headers: {
           "Authorization": `Bearer ${token}`,
         }
       })
       if (!res.ok) {
         throw new Error(`Error fetching hint: ${res.status}`);
-      } 
+      }
       const data = await res.json();
       alert(data.hint);
     }
@@ -106,27 +104,36 @@ function Test({ params }) {
     }
   }
 
+
+
   async function handleSubmit() {
     const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    const student_id = decoded.sub;
+
+    const submission_data = {
+      code: code,
+      problem_id: problemId,
+      owner: student_id
+    };
+
     if (!token) {
       throw new Error("Token not found");
     }
     try {
-      const res = await fetch(`http://10.69.0.11:4000/submit`, {
+      const res = await fetch(`http://161.246.5.48:3777/submit?token=${token}`, {
         method: "POST",
-        queryParams: {
-          token: token,
-        },
         headers: {
           "Authorization": `Bearer ${token}`,
+          "content-type": "application/json",
         },
-        body: JSON.stringify({ problem_id: problemId, code: code }),
+        body: JSON.stringify(submission_data),
       });
       if (!res.ok) {
         throw new Error(`Error submitting code: ${res.status}`);
       }
       const data = await res.json();
-      alert(data);
+      alert("Submitted successfully");
     }
     catch (error) {
       alert(error);
@@ -154,10 +161,10 @@ function Test({ params }) {
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleRunCode} label="Run" variant="primary" size="md" />
             </div>
             <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
-              <Playground 
+              <Playground
                 starterCode={code}
                 theme="dark"
-                oncodeChange={handleCodeChange}  
+                oncodeChange={handleCodeChange}
               />
             </div>
           </div>
@@ -180,7 +187,7 @@ function Test({ params }) {
                       <div key={index} className="border-light_theme dark:border-dark_theme text-primary-foreground dark:text-white rounded-full px-2 py-1.5 mr-2 border">
                         {tag}
                       </div>
-                    ))}  
+                    ))}
 
                   </div>
                   <div id="description" className="m-4 dark:text-white">
