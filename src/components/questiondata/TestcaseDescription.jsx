@@ -129,6 +129,20 @@ function TestcaseDescription({ descriptionData, setDescriptionData }) {
                 placeholder="Enter output description here..."
               />
             </div>
+            <div className="w-2/3 pl-2 mt-4">
+              <label htmlFor="hint" className="font-bold">
+                Hint:
+              </label>
+              <textarea
+                name="hint"
+                id="hint"
+                value={descriptionData.hint}
+                onChange={handleChange}
+                rows="2"
+                className="w-full border border-grey-300 rounded p-2 mt-2 text-black"
+                placeholder="Enter hint here... (Optional)" 
+              />
+            </div>
           </div>
         </div>
       </form>
