@@ -4,6 +4,10 @@ import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { jwtDecode } from "jwt-decode";
 
+// import Normal from "@/public/normal.png"
+// import Normal from "../../public/normal.png";
+
+
 // Dynamically import components (avoiding SSR issues)
 const Playground = dynamic(() => import("@/components/playground"), { ssr: false });
 const Button = dynamic(() => import("@/components/button"), { ssr: false });
@@ -18,6 +22,8 @@ function Test({ params }) {
   const [problemData, setProblemData] = useState({});
   const [code, setCode] = useState("");
   const [result, setResult] = useState([]);
+  // 
+  const [activeTab, setActiveTab] = useState("details"); 
 
   const searchParams = useSearchParams(); // Access query params
 
@@ -74,6 +80,9 @@ function Test({ params }) {
       const data = await res.json();
       setResult(data["results"]);
       alert(data["results"]);
+      // 
+      setActiveTab("testcases"); 
+      // fix here
     }
     catch (error) {
       alert(error);
@@ -155,7 +164,6 @@ function Test({ params }) {
         <div className="flex flex-grow">
           <div className="w-[50%] h-screen border border-dark-grey border-light_theme dark:border-dark_theme flex flex-col">
             <div className="flex justify-center items-center bg-primary text-primary-foreground dark:text-white space-x-3 py-1 px-1 ">
-              {/* <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleClick} label="Click me" variant="primary" size="md" /> */}
               <div className="w-full bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme text-center py-2 px-4 rounded-lg">Python 3.11.2</div>
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleHint} label="Hint" variant="primary" size="md" />
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleRunCode} label="Run" variant="primary" size="md" />
@@ -169,13 +177,17 @@ function Test({ params }) {
             </div>
           </div>
           <div className="w-[50%] h-screen border border-dark-grey border-light_theme dark:border-dark_theme flex flex-col">
-            <Tabs defaultValue="details" className="flex flex-col h-full w-full">
-              <TabsList className="flex justify-center">
+            {/* <Tabs defaultValue="details" className="flex flex-col h-full w-full"> */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full w-full">
+              <TabsList className="flex justify-center pt-3">
                 <TabsTrigger className="w-1/3 h-10 dark:text-white" value="details">Description</TabsTrigger>
                 <TabsTrigger className="w-1/3 h-10 dark:text-white" value="testcases">Test Case Example</TabsTrigger>
-                <Button className="w-1/3 h-10 dark:text-white" value="submit" onClick={handleSubmit}>Submit</Button>
+                <TabsTrigger className="w-1/3 h-10 dark:text-white bg-light_theme dark:bg-dark_theme rounded-lg" value="submit" onClick={handleSubmit} >Submit</TabsTrigger>
+                {/* <Button className="w-1/3 h-10 dark:text-white bg-red" value="submit" onClick={handleSubmit}>Submit</Button> */}
+                {/* <Button className="w-1/3 h-10 dark:text-white bg-red" value="submit" onClick={handleSubmit}>Submit</Button> */}
               </TabsList>
               <div className="flex-grow overflow-y-auto" style={{ height: "calc(100vh - 55px)" }}>
+
                 <TabsContent value="details">
                   <h1 className="text-3xl m-2 dark:text-white">{problemData?.title}</h1>
                   <div id="tags" className="flex m-2 h-10">
@@ -202,7 +214,8 @@ function Test({ params }) {
                     <p>{problemData?.output_format}</p>
                   </div>
                 </TabsContent>
-                <TabsContent value="testcases">
+
+                {/* <TabsContent value="testcases">
                   <h1 className="text-3xl m-2 dark:text-white">Example Testcases</h1>
                   <div id="testcases" className="m-4">
                     {problemData.test_cases?.map((testcase, index) => (
@@ -212,7 +225,74 @@ function Test({ params }) {
                       </div>
                     ))}
                   </div>
-                </TabsContent>
+
+                  <form action="Case3" className=" dark:text-white  text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2">
+                  <h1>Test case 3</h1>
+                  <div id="testcase3"  className="m-4">
+                    <div className="flex justify-between">
+                    <div className="w-1/2">
+                      {/* Input Field */}
+                      {/* <label htmlFor="input" className="font-bold">Input:</label>
+                      <input
+                        type="text"
+                        id="input"
+                        name="input"
+                        className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
+                      />
+                    </div>
+
+                    <div className="w-1/2 pl-2">
+                      {/* Output Field */}
+                      {/* <label htmlFor="output" className="font-bold">Output:</label>
+                      <input
+                        type="text"
+                        id="output"
+                        name="output"
+                        className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
+                      />
+                    </div>
+                    </div>
+                  </div>
+                  </form>
+
+                // </TabsContent> */}
+
+<TabsContent value="testcases">
+  <h1 className="text-3xl m-2 dark:text-white">Example Testcases</h1>
+  <div id="testcases" className="m-4">
+    {problemData.test_cases?.map((testcase, index) => (
+      <div key={index} className="flex justify-between">
+        <form action="Case3" className="dark:text-white text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2">
+          <h1>
+            Test case {index + 1}
+            {/* <img src="normal.png" alt="Test Case Icon" className="inline-block ml-2 w-8" /> */}
+            <img
+              src={result.length === 0 ? "normal.png" : result[index] === true ? "true.png" : "false.png"}
+              alt="Test Case Icon"
+              className="inline-block ml-2 w-6 pb-1"
+            />
+            </h1>
+          <div id={`testcase${index + 1}`} className="m-4">
+            <div className="flex justify-between">
+              {/* Input Field */}
+              <div className="w-1/2 pr-44">
+                <label htmlFor="input" className="font-bold">Input:</label>
+                <pre className="w-full">{testcase.input}</pre>
+              </div>
+
+              {/* Output Field */}
+              <div className="w-1/2 pl-44 pr-44">
+                <label htmlFor="output" className="font-bold">Output:</label>
+                <pre className="w-full">{testcase.output}</pre>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    ))}
+  </div>
+</TabsContent>
+
               </div>
             </Tabs>
           </div>
