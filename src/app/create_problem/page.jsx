@@ -1,6 +1,6 @@
 'use client';
 
-import Playground from "@/components/playground";
+import Playground from "@/components/playground_problem";
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -69,7 +69,7 @@ export const useProblemFormValidation = (descriptionData, testcaseData, solution
   };
 };
 
-export const submitProblem = async (descriptionData, testcaseData, solution) => {
+export const submitProblem = async (descriptionData, testcaseData, solution, templateCode, starterCode) => {
   try {
     const formattedTestCases = testcaseData
       .filter(test => test.input && test.output)
@@ -101,8 +101,8 @@ export const submitProblem = async (descriptionData, testcaseData, solution) => 
       solves: 0,
       hidden_test_cases: [{}],
       solution: solution,
-      template: "",
-      starter: ""
+      template: templateCode,
+      starter: starterCode
     };
 
     const response = await fetch('http://161.246.5.48:3777/problems/create', {
@@ -141,7 +141,7 @@ const ErrorDisplay = ({ errors, show }) => {
   );
 };
 
-function TestCase() {
+function create_problem() {
   const [descriptionData, setDescriptionData] = useState({
     title: "",
     description: "",
@@ -152,6 +152,10 @@ function TestCase() {
   });
   const [testcaseData, setTestcaseData] = useState(Array(5).fill({ input: '', output: '' }));
   const [solutionCode, setSolutionCode] = useState("");
+  const [templateCode, setTemplateCode] = useState("");
+  const [starterCode, setStarterCode] = useState("");
+  const [activePlaygroundTab, setActivePlaygroundTab] = useState("solution");
+  const [activeDescriptionTab, setActiveDescriptionTab] = useState("details");
 
   const { 
     errors, 
@@ -162,7 +166,13 @@ function TestCase() {
   const handleSubmit = async () => {
     if (triggerValidation()) {
       try {
-        const result = await submitProblem(descriptionData, testcaseData, solutionCode);
+        const result = await submitProblem(
+          descriptionData, 
+          testcaseData, 
+          solutionCode, 
+          templateCode, 
+          starterCode
+        );
         console.log('Problem created successfully:', result);
         alert('Problem created successfully!');
       } catch (error) {
@@ -190,22 +200,70 @@ function TestCase() {
         <div className="flex flex-grow">
           {/* Playground Section */}
           <div className="w-[50%] h-screen border border-light_theme dark:border-dark_theme dark:text-white flex flex-col">
-            <div className="flex bg-primary text-primary-foreground space-x-3 py-1 pl-1">
-              <div className="w-full sm:w-[30%] bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme text-center py-2 px-4 rounded-lg">
-                Python
+            <Tabs 
+              defaultValue="solution" 
+              className="flex flex-col h-full w-full"
+              onValueChange={setActivePlaygroundTab}
+            >
+              <TabsList className="flex justify-center pt-1 pr-2 relative">
+                {/* Active Tab Indicator */}
+                <div 
+                  className="absolute left-0 right-0 top-0 h-1 dark:bg-[#d08d2d] bg-[#179299] transition-all duration-300"
+                  style={{
+                    transform: `translateX(${
+                      activePlaygroundTab === 'solution' ? '0%' : 
+                      activePlaygroundTab === 'template' ? '100%' : 
+                      activePlaygroundTab === 'starter' ? '200%' : '0%'
+                    })`,
+                    width: '33.33%'
+                  }}
+                />
+                <TabsTrigger className="w-1/3 h-10" value="solution">Solution</TabsTrigger>
+                <TabsTrigger className="w-1/3 h-10" value="template">Template</TabsTrigger>
+                <TabsTrigger className="w-1/3 h-10" value="starter">Starter</TabsTrigger>
+              </TabsList>
+              <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
+                <TabsContent value="solution">
+                  <Playground
+                    initialCode={solutionCode}
+                    onCodeChange={(code) => setSolutionCode(code)}
+                  />
+                </TabsContent>
+                <TabsContent value="template">
+                  <Playground
+                    initialCode={templateCode}
+                    onCodeChange={(code) => setTemplateCode(code)}
+                  />
+                </TabsContent>
+                <TabsContent value="starter">
+                  <Playground
+                    initialCode={starterCode}
+                    onCodeChange={(code) => setStarterCode(code)}
+                  />
+                </TabsContent>
               </div>
-            </div>
-            <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
-              <Playground
-                onCodeChange={(code) => setSolutionCode(code)}
-              />
-            </div>
+            </Tabs>
           </div>
 
           {/* Tabs Section */}
           <div className="w-[50%] h-screen border border-light_theme dark:border-dark_theme dark:text-white flex flex-col">
-            <Tabs defaultValue="details" className="flex flex-col h-full w-full">
-              <TabsList className="flex justify-center pt-5 pr-2">
+            <Tabs 
+              defaultValue="details" 
+              className="flex flex-col h-full w-full"
+              onValueChange={setActiveDescriptionTab}
+            >
+              <TabsList className="flex justify-center pt-5 pr-2 relative">
+                {/* Active Tab Indicator */}
+                <div 
+                  className="absolute left-0 right-0 top-0 h-1 dark:bg-[#d08d2d] bg-[#179299] transition-all duration-300"
+                  style={{
+                    transform: `translateX(${
+                      activeDescriptionTab === 'details' ? '0%' : 
+                      activeDescriptionTab === 'testcases' ? '100%' : '0%'
+                    })`,
+                    width: '33.33%'
+                  }}
+                />
                 <TabsTrigger className="w-1/3 h-10" value="details">Description</TabsTrigger>
                 <TabsTrigger className="w-1/3 h-10" value="testcases">+ Add Test Case</TabsTrigger>
                 <button
@@ -237,4 +295,4 @@ function TestCase() {
   );
 }
 
-export default TestCase;
+export default create_problem;

@@ -51,18 +51,17 @@ const Header = () => {
   };
 
   return (
-    <nav className="dark:bg-black bg-white w-full h-40 text-lightText sticky top-0 z-50"> {/* Added top-0 and z-50 for layering */}
+    <nav className="dark:bg-black bg-white w-full h-40 text-lightText "> {/* Added top-0 and z-50 for layering */}
       <div className='h-full w-full mx-auto inline-flex items-center justify-between px-4'>
         <div className="space-y-2 h-[70%] w-[60%]">
           <p className="font-syne text-6xl dark:text-white text-black">Welcome {name}!</p>
-          <p className="font-syne text-xl dark:text-white text-black">Here is your Profile Dashboard</p>
         </div>
-        <div className="relative flex items-center ml-auto mt-8">
-          <div className="p-4 pb-20">
+        <div className="relative flex items-center ml-auto">
+          <div className="p-4 pb-8">
             <Theme />
           </div>
           <div 
-            className='p-8 pb-24 relative' 
+            className='p-8 pb-12 relative' 
             onMouseEnter={toggleDropdown} 
             onMouseLeave={toggleDropdown}
           >
