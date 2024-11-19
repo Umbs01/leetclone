@@ -17,6 +17,14 @@ function Playground({ starterCode, theme, oncodeChange }) {
             onChange={onChange} 
             theme={theme === 'dark' ? vscodeDark : vscodeLight} 
             height={"calc(100vh - 55px);"}
+            options={{
+                lineNumbers: true,
+                tabSize: 4,
+                lineWrapping: true,
+                lint: true,
+                gutters: ['CodeMirror-lint-markers'],
+                mode: 'python',
+            }}
         />
     );
 }
