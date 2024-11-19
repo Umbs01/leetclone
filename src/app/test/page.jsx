@@ -41,10 +41,11 @@ function Test() {
         <Header />
         <div className="flex flex-grow">
           <div className="w-[50%] h-screen border border-dark-grey border-light_theme dark:border-dark_theme flex flex-col">
-            <div className="flex justify-center items-center bg-primary text-primary-foreground dark:text-white space-x-3 py-1">
-              <Button extra="w-full border-light_theme dark:border-dark_theme" onClick={handleClick} label="Click me" variant="primary" size="md" />
-              <Button extra="w-full border-light_theme dark:border-dark_theme" onClick={handleClick} label="Hint" variant="primary" size="md" />
-              <Button extra="w-full border-light_theme dark:border-dark_theme" onClick={handleClick} label="Submit" variant="primary" size="md" />
+            <div className="flex justify-center items-center bg-primary text-primary-foreground dark:text-white space-x-3 py-1 px-1 ">
+              {/* <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleClick} label="Click me" variant="primary" size="md" /> */}
+              <div className="w-full bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme text-center py-2 px-4 rounded-lg">Python</div>
+              <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleClick} label="Hint" variant="primary" size="md" />
+              <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleClick} label="Run" variant="primary" size="md" />
             </div>
             <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
               <Playground />
@@ -62,13 +63,23 @@ function Test() {
                   <h1 className="text-3xl m-2 dark:text-white">Problem Title</h1>
                   <div id="tags" className="flex m-2 h-10">
                     <div className="border-light_theme dark:border-dark_theme text-primary-foreground dark:text-white rounded-full px-10 py-1.5 mr-2 border">Difficulty: {queryParams.level}</div>
-                    <div className="border-light_theme dark:border-dark_theme text-primary-foreground dark:text-white rounded-full px-2 py-1.5 mr-2 border">Status: {queryParams.status}</div>
+                    {/* <div className="border-light_theme dark:border-dark_theme text-primary-foreground dark:text-white rounded-full px-2 py-1.5 mr-2 border">Status: {queryParams.status}</div> */}
+                    <div className="border-light_theme dark:border-dark_theme text-primary-foreground dark:text-white rounded-full px-2 py-1.5 mr-2 border">Some tags</div>
+
                   </div>
                   <div id="description" className="m-4 dark:text-white">
                     <p>{queryParams.name}</p>
                   </div>
+                  <div id="score" className="m-4 dark:text-white">
+                    <h2 className="font-bold">score</h2>
+                    <p>Points: {queryParams.point}</p>
+                  </div>
                   <div id="input" className="m-4 dark:text-white">
                     <h2 className="font-bold">Input</h2>
+                    <p>Points: {queryParams.point}</p>
+                  </div>
+                  <div id="output" className="m-4 dark:text-white">
+                    <h2 className="font-bold">output</h2>
                     <p>Points: {queryParams.point}</p>
                   </div>
                 </TabsContent>
