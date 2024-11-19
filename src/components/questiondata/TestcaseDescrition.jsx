@@ -80,6 +80,17 @@ function TestcaseDescriptioin() {
               />
             </div>
 
+            <div className="w-2/3 pl-2 mt-4">
+              <label htmlFor="Hint" className="font-bold">Hint:</label>
+              <textarea
+                id="hint"
+                name="hint"
+                rows="2"
+                className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
+                placeholder="Enter hint here..."
+              />
+            </div>
+            
             {/* Description Field */}
             <div className="w-2/3 pl-2 mt-4">
               <label htmlFor="description" className="font-bold">Description:</label>
@@ -91,6 +102,8 @@ function TestcaseDescriptioin() {
                 placeholder="Enter description here..."
               />
             </div>
+            {/* Hint Field */}
+
           </div>
         </div>
       </form>
