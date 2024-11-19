@@ -1,7 +1,6 @@
 'use client';
 
 import Playground from "@/components/playground";
-import Button from "@/components/Button";
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

@@ -1,30 +1,25 @@
 import React, { useState, useCallback } from 'react'; 
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
 
 const extension = [python()];
 
-function Playground() {
-    const [value, setValue] = useState("print('Hello World!')");
+function Playground({ starterCode, theme, oncodeChange }) {
     const onChange = useCallback((val, viewUpdate) => {
-      console.log('val:', val);
-      setValue(val);
-    }, []);
+      oncodeChange(val);
+    }, [oncodeChange]);
     
     return (
         <CodeMirror 
-            value={value} 
+            value={starterCode} 
             extensions={extension} 
             onChange={onChange} 
-            theme={vscodeDark} 
+            theme={theme === 'dark' ? vscodeDark : vscodeLight} 
             height={"calc(100vh - 55px);"}
         />
     );
 }
 
 export default Playground;
-
-
-
 
