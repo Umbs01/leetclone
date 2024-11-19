@@ -16,6 +16,7 @@ function Test({ params }) {
   const [queryParams, setQueryParams] = useState({ name: "", point: "", level: "", status: "" });
   const [problemData, setProblemData] = useState({});
   const [code, setCode] = useState("");
+  const [result, setResult] = useState([]);
 
   const searchParams = useSearchParams(); // Access query params
 
@@ -57,15 +58,21 @@ function Test({ params }) {
     setCode(newCode);
   };
 
-  function handleRunCode() {
+  async function handleRunCode() {
     try {
-      const res = fetch(`http://10.69.0.11:4000/run-code/${problemId}`, {
+      const res = await fetch(`http://10.69.0.11:4000/run-code/${problemId}`, {
         method: "POST",
         body: JSON.stringify({ test_cases: problemData.test_cases, code: code }),
         headers: {
           "Content-Type": "application/json",
         },
       });
+      if (!res.ok) {
+        throw new Error(`Error running code: ${res.status}`);
+      }
+      const data = await res.json();
+      setResult(data["results"]);
+      alert(data["results"]);
     }
     catch (error) {
       alert(error);
@@ -79,7 +86,7 @@ function Test({ params }) {
       throw new Error("Token not found");
     }
     try {
-      const res = fetch(`http://10.69.0.11:4000/problems/hint/${problemId}`, {
+      const res = await fetch(`http://10.69.0.11:4000/problems/hint/${problemId}`, {
         method: "POST",
         queryParams: {
           token: token,
@@ -96,6 +103,34 @@ function Test({ params }) {
     }
     catch (error) {
       throw new Error("Error fetching token");
+    }
+  }
+
+  async function handleSubmit() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token not found");
+    }
+    try {
+      const res = await fetch(`http://10.69.0.11:4000/submit`, {
+        method: "POST",
+        queryParams: {
+          token: token,
+        },
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ problem_id: problemId, code: code }),
+      });
+      if (!res.ok) {
+        throw new Error(`Error submitting code: ${res.status}`);
+      }
+      const data = await res.json();
+      alert(data);
+    }
+    catch (error) {
+      alert(error);
+      throw new Error("Error submitting code");
     }
   }
 
@@ -131,7 +166,7 @@ function Test({ params }) {
               <TabsList className="flex justify-center">
                 <TabsTrigger className="w-1/3 h-10 dark:text-white" value="details">Description</TabsTrigger>
                 <TabsTrigger className="w-1/3 h-10 dark:text-white" value="testcases">Test Case Example</TabsTrigger>
-                <Button className="w-1/3 h-10 dark:text-white" value="submit">Submit</Button>
+                <Button className="w-1/3 h-10 dark:text-white" value="submit" onClick={handleSubmit}>Submit</Button>
               </TabsList>
               <div className="flex-grow overflow-y-auto" style={{ height: "calc(100vh - 55px)" }}>
                 <TabsContent value="details">
