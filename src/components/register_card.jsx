@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterCard() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,17 @@ export default function RegisterCard() {
   });
 
   const [errors, setErrors] = useState({});
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/question");
+    } else {
+      console.log("No token found");
+    }
+  }, []);
 
   const handlestudentIDInput = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
@@ -101,9 +113,8 @@ export default function RegisterCard() {
             id="username"
             value={formData.username}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border ${
-              errors.username ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
+            className={`w-full px-3 py-2 border ${errors.username ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
             required
           />
           {errors.username && (
@@ -123,9 +134,8 @@ export default function RegisterCard() {
             id="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
+            className={`w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
             required
           />
           {errors.email && (
@@ -145,9 +155,8 @@ export default function RegisterCard() {
             id="student_id"
             onInput={handlestudentIDInput}
             value={formData.student_id}
-            className={`w-full px-3 py-2 border ${
-              errors.student_id ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
+            className={`w-full px-3 py-2 border ${errors.student_id ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
             required
           />
           {errors.student_id && (
@@ -167,9 +176,8 @@ export default function RegisterCard() {
             id="password"
             value={formData.password}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border ${
-              errors.password ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
+            className={`w-full px-3 py-2 border ${errors.password ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-[#DF8E1D]`}
             required
           />
           {errors.password && (

@@ -1,25 +1,45 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import Header from "@/components/header";
-import Sidebar from "@/components/sidebar";
-import Theme from "@/components/theme";
-import FirstNav from "@/components/firstnavbar";
-import Question from "@/components/question";
+'use client';
 
-export default function Home() {
+import { useEffect } from "react";
+import FirstNavbar from "@/components/firstnavbar";
+import Image from "next/image";
+import page_logo from "/public/Python.png";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+export default function Page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/question");
+    } else {
+      console.log("No token found");
+    }
+  }, []);
+
   return (
-    <>
-      <div className="flex h-screen">
-        <div id="left" className="w-[20%] p-4 border-r border-light_theme dark:border-dark_theme">
-          <Sidebar />
-        </div>
-        <div id="right" className="w-[80%] p-4 overflow-y-auto"> {/* Added overflow-y-auto */}
-          <Header/>
-          <div className=" scroll-smooth">
-            <Question />
-          </div>
+    <div className="dark:bg-slate-950 bg-white flex-col flex min-h-screen">
+      <FirstNavbar />
+      <div className="flex-auto flex items-center justify-center flex-col">
+        <Image src={page_logo} width={600} height={600} alt="Logo image" />
+        <p className="text-black dark:text-white">
+          Welcome to SE coding platform!
+        </p>
+        <div className="mt-4 flex justify-center space-x-4">
+          <Link href="/login">
+            <button className="text-white dark:bg-dark_theme hover:dark:bg-dark_theme_click bg-light_theme  hover:bg-light_theme_click py-2 px-4 font-bold rounded-full focus:outline-none focus:ring-2">
+              Login
+            </button>
+          </Link>
+          <Link href="/register">
+            <button className=" text-white dark:bg-dark_theme hover:dark:bg-dark_theme_click bg-light_theme  hover:bg-light_theme_click py-2 px-4 font-bold rounded-full focus:outline-none focus:ring-2">
+              Register
+            </button>
+          </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 }

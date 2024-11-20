@@ -8,6 +8,8 @@ import TestcaseAdd from "@/components/questiondata/TestcaseAdd";
 import TestcaseDescription from "@/components/questiondata/TestcaseDescription";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import withAuth from "@/hoc/withAuth";
+import { useRouter } from "next/navigation";
 
 export const useProblemFormValidation = (descriptionData, testcaseData, solutionCode) => {
   const [errors, setErrors] = useState({});
@@ -141,7 +143,7 @@ const ErrorDisplay = ({ errors, show }) => {
   );
 };
 
-function create_problem() {
+function CreateProblem() {
   const [descriptionData, setDescriptionData] = useState({
     title: "",
     description: "",
@@ -156,12 +158,26 @@ function create_problem() {
   const [starterCode, setStarterCode] = useState("");
   const [activePlaygroundTab, setActivePlaygroundTab] = useState("solution");
   const [activeDescriptionTab, setActiveDescriptionTab] = useState("details");
+  const router = useRouter();
 
   const { 
     errors, 
     showErrors, 
     triggerValidation 
   } = useProblemFormValidation(descriptionData, testcaseData, solutionCode);
+
+    // Check if user is admin
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     const decoded = jwtDecode(token);
+  //     const admin_role = decoded.role;
+  //     if (admin_role !== "admin") {
+  //       alert("Only admin can access this page");
+  //       router.push("/question");
+  //     }
+  //   }
+  // }, []);
 
   const handleSubmit = async () => {
     if (triggerValidation()) {
@@ -295,4 +311,4 @@ function create_problem() {
   );
 }
 
-export default create_problem;
+export default withAuth(CreateProblem);

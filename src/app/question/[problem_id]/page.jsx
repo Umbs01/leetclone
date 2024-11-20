@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams, useRouter} from "next/navigation";
 import dynamic from "next/dynamic";
 import { jwtDecode } from "jwt-decode";
+import withAuth from "@/hoc/withAuth";
 
 // import Normal from "@/public/normal.png"
 // import Normal from "../../public/normal.png";
@@ -15,13 +16,16 @@ const Header = dynamic(() => import("@/components/header"), { ssr: false });
 const Sidebar = dynamic(() => import("@/components/sidebar"), { ssr: false });
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function Test({ params }) {
-  const problemId = params.problem_id;
+function Test() {
+  // const problemId = params.problem_id;
   const [isClient, setIsClient] = useState(false);
   const [queryParams, setQueryParams] = useState({ name: "", point: "", level: "", status: "" });
   const [problemData, setProblemData] = useState({});
   const [code, setCode] = useState("");
   const [result, setResult] = useState([]);
+  const params = useParams();
+  const problemId = params?.problem_id;
+  const router = useRouter();
   // 
   const [activeTab, setActiveTab] = useState("details"); 
 
@@ -154,6 +158,10 @@ function Test({ params }) {
     return null; // Render nothing until client-side rendering is confirmed
   }
 
+  const handleEdit = () => {
+    router.push(`/question/${problemId}/update`);
+  }
+
   return (
     <div className="flex h-screen">
       <div id="left" className="w-[20%] p-4 border-r border-light_theme dark:border-dark_theme">
@@ -165,8 +173,10 @@ function Test({ params }) {
           <div className="w-[50%] h-screen border border-dark-grey border-light_theme dark:border-dark_theme flex flex-col">
             <div className="flex justify-center items-center bg-primary text-primary-foreground dark:text-white space-x-3 py-1 px-1 ">
               <div className="w-full bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme text-center py-2 px-4 rounded-lg">Python 3.11.2</div>
+              <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleEdit} label="Edit problem" variant="primary" size="md" />
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleHint} label="Hint" variant="primary" size="md" />
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleRunCode} label="Run" variant="primary" size="md" />
+              
             </div>
             <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
               <Playground
@@ -302,4 +312,4 @@ function Test({ params }) {
   );
 }
 
-export default Test;
+export default withAuth(Test);
