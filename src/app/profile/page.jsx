@@ -7,8 +7,10 @@ import StatGraph from "@/components/profile/StatGraph";
 import TotalSolved from "@/components/profile/total_solved";
 import Score from "@/components/profile/score";
 import Diff_solved from "@/components/profile/diff_solved";
+import withAuth from "../../hoc/withAuth";
+import { jwtDecode } from "jwt-decode";
 
-export default function Profile() {
+function Profile() {
   const [profile, setProfile] = useState({
     username: "Loading...",
     email: "",
@@ -25,24 +27,42 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        // sample data
-        const data = {
-          username: "Arhway2000",
-          email: "Arhway2000@gmail.com",
-          solved: {
-            fundamental: 7,
-            medium: 12,
-            difficult: 3,
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const decoded = jwtDecode(token);
+        const student_id = decoded.sub;
+
+        const response = await fetch(`http://161.246.5.48:3777/users/${student_id}?token=${token}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type" : "application/json"
           },
-          score: 1500,
-        };
-        setProfile(data);
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+        const data = await response.json();
+
+        setProfile({
+          username: data.username || "N/A",
+          email: data.email || "N/A",
+          solved: {
+            fundamental: data.solved_problems.filter((problem) => problem.difficulty === "easy").length,
+            medium: data.solved_problems.filter((problem) => problem.difficulty === "medium").length,
+            difficult: data.solved_problems.filter((problem) => problem.difficulty === "hard").length,
+          },
+          score: data.score || 0,
+        });
       } catch (error) {
         console.error("Error fetching profile data", error);
       }
     };
-    fetchProfileData();
-  }, []);
+      fetchProfileData();
+    }, []);
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -127,3 +147,6 @@ export default function Profile() {
     </div>
   );
 }
+
+// export default withAuth(Profile);
+export default Profile;

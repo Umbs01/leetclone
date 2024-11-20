@@ -267,7 +267,7 @@ function Test({ params }) {
             Test case {index + 1}
             {/* <img src="normal.png" alt="Test Case Icon" className="inline-block ml-2 w-8" /> */}
             <img
-              src={result.length === 0 ? "normal.png" : result[index] === true ? "true.png" : "false.png"}
+              src={result.length === 0 ? "/normal.png" : result[index] === true ? "/true.png" : "/false.png"}
               alt="Test Case Icon"
               className="inline-block ml-2 w-6 pb-1"
             />
