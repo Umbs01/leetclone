@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Logo from "../image/Logo.png";
 import Link from "next/link";
-import Theme from "../components/theme"; 
 import { FaCode } from "react-icons/fa6";
 import { useEffect } from "react";
 import { GoPerson } from "react-icons/go";
@@ -45,7 +44,6 @@ const Sidebar = () => {
                     className="hidden items-center  justify-center space-x-4 pt-20 hover:text-light_theme hover:dark:text-dark_theme" 
                     id="create_problem" 
                     href="/create_problem" 
-                    // style={{ display: 'none', float: 'right' }}
                 >
                     <FaCode className="text-2xl" />
                     <p>Create problem</p>

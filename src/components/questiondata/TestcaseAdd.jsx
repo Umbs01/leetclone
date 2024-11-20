@@ -11,7 +11,7 @@ function TestcaseAdd({ testcaseData, setTestcaseData }) {
   };
 
   return (
-    <form className="dark:text-white text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2">
+    <form className="dark:text-white text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2 mt-4">
       <h1>Test Cases</h1>
       {testcaseData.map((testcase, index) => (
         <div className="m-4" key={index}>

@@ -104,7 +104,7 @@ function Profile() {
       {/* Main Content */}
       <div className="flex-1 p-4 w-full overflow-x-hidden">
         <Header />
-        <div className="mt-8 lg:mt-7 flex flex-col lg:flex-row gap-4">
+        <div className="mt-8 lg:mt-16 flex flex-col lg:flex-row gap-4">
           {/* Profile Card */}
           <div className="w-full lg:w-1/3">
             <div className="h-full bg-white dark:bg-gray-800 rounded-lg shadow">
