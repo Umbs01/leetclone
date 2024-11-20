@@ -1,12 +1,11 @@
-import Image from "next/image";
-// import styles from "./page.module.css";
+'use client';
+
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
-import Theme from "@/components/theme";
-import FirstNav from "@/components/firstnavbar";
 import Question from "@/components/question";
+import withAuth from "../../hoc/withAuth";
 
-export default function Practice() {
+function Practice() {
   return (
     <>
       <div className="flex h-screen">
@@ -23,3 +22,4 @@ export default function Practice() {
     </>
   );
 }
+export default withAuth(Practice);

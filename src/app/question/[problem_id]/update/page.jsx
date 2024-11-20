@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TestcaseAdd from "@/components/questiondata/TestcaseAdd";
 import TestcaseDescription from "@/components/questiondata/TestcaseDescription";
 import { jwtDecode } from "jwt-decode";
+import withAuth from "@/hoc/withAuth";
 
 // Reuse the validation hook with slight modifications
 export const useProblemFormValidation = (descriptionData, testcaseData, solutionCode) => {
@@ -83,6 +84,7 @@ const ErrorDisplay = ({ errors, show }) => {
   );
 };
 
+
 function UpdateQuestion() {
   const router = useRouter();
   const params = useParams();
@@ -103,11 +105,26 @@ function UpdateQuestion() {
   const [starterCode, setStarterCode] = useState("");
   const [activePlaygroundTab, setActivePlaygroundTab] = useState("solution");
 
+
   const {
     errors,
     showErrors,
     triggerValidation
   } = useProblemFormValidation(descriptionData, testcaseData, solutionCode);
+
+  // Check if user is admin
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      const admin_role = decoded.role;
+      if (admin_role !== "admin") {
+        alert("Only admin can access this page");
+        router.push(`/question/${params.problem_id}`);
+      }
+    }
+  }, [router, params.problem_id]);
+
 
   // Fetch existing question data
   useEffect(() => {
@@ -237,7 +254,7 @@ function UpdateQuestion() {
       }
 
       alert('Problem deleted successfully!');
-      router.push('/problems');
+      router.push('/question');
     } catch (error) {
       console.error('Error deleting problem:', error);
       alert('Failed to delete problem: ' + error.message);
@@ -378,4 +395,4 @@ function UpdateQuestion() {
   );
 }
 
-export default UpdateQuestion;
+export default withAuth(UpdateQuestion);

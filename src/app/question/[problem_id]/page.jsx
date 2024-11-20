@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { jwtDecode } from "jwt-decode";
+import withAuth from "@/hoc/withAuth";
 
 // import Normal from "@/public/normal.png"
 // import Normal from "../../public/normal.png";
@@ -15,15 +16,18 @@ const Header = dynamic(() => import("@/components/header"), { ssr: false });
 const Sidebar = dynamic(() => import("@/components/sidebar"), { ssr: false });
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function Test({ params }) {
-  const problemId = params.problem_id;
+function Test() {
+  // const problemId = params.problem_id;
   const [isClient, setIsClient] = useState(false);
   const [queryParams, setQueryParams] = useState({ name: "", point: "", level: "", status: "" });
   const [problemData, setProblemData] = useState({});
   const [code, setCode] = useState("");
   const [result, setResult] = useState([]);
+  const params = useParams();
+  const problemId = params?.problem_id;
+  const router = useRouter();
   // 
-  const [activeTab, setActiveTab] = useState("details"); 
+  const [activeTab, setActiveTab] = useState("details");
 
   const searchParams = useSearchParams(); // Access query params
 
@@ -80,9 +84,7 @@ function Test({ params }) {
       const data = await res.json();
       setResult(data["results"]);
       alert(data["results"]);
-      // 
-      setActiveTab("testcases"); 
-      // fix here
+      setActiveTab("testcases");
     }
     catch (error) {
       alert(error);
@@ -142,7 +144,12 @@ function Test({ params }) {
         throw new Error(`Error submitting code: ${res.status}`);
       }
       const data = await res.json();
-      alert("Submitted successfully");
+      if (data.is_accepted === true) {
+        alert("Code Accepted. Congratulations!");
+      }
+      else {
+        alert("Code Rejected. Please try again");
+      }
     }
     catch (error) {
       alert(error);
@@ -151,7 +158,11 @@ function Test({ params }) {
   }
 
   if (!isClient) {
-    return null; // Render nothing until client-side rendering is confirmed
+    return null; 
+  }
+
+  const handleEdit = () => {
+    router.push(`/question/${problemId}/update`);
   }
 
   return (
@@ -165,8 +176,10 @@ function Test({ params }) {
           <div className="w-[50%] h-screen border border-dark-grey border-light_theme dark:border-dark_theme flex flex-col">
             <div className="flex justify-center items-center bg-primary text-primary-foreground dark:text-white space-x-3 py-1 px-1 ">
               <div className="w-full bg-light_theme dark:bg-dark_theme border border-light_theme dark:border-dark_theme text-center py-2 px-4 rounded-lg">Python 3.11.2</div>
+              <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleEdit} label="Edit problem" variant="primary" size="md" />
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleHint} label="Hint" variant="primary" size="md" />
               <Button extra="w-full border-light_theme dark:border-dark_theme hover:dark:bg-dark_theme hover:bg-light_theme" onClick={handleRunCode} label="Run" variant="primary" size="md" />
+
             </div>
             <div style={{ height: "calc(100vh - 55px)" }} className="overflow-scroll rounded">
               <Playground
@@ -214,85 +227,41 @@ function Test({ params }) {
                     <p>{problemData?.output_format}</p>
                   </div>
                 </TabsContent>
-
-                {/* <TabsContent value="testcases">
+                <TabsContent value="testcases">
                   <h1 className="text-3xl m-2 dark:text-white">Example Testcases</h1>
                   <div id="testcases" className="m-4">
                     {problemData.test_cases?.map((testcase, index) => (
                       <div key={index} className="flex justify-between">
-                        <div className="w-1/2 dark:text-white"><h2 className="font-bold">Input</h2><pre>{testcase.input}</pre></div>
-                        <div className="w-1/2 dark:text-white"><h2 className="font-bold">Output</h2><pre>{testcase.output}</pre></div>
+                        <form action="Case3" className="dark:text-white text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2">
+                          <h1>
+                            Test case {index + 1}
+                            {/* <img src="normal.png" alt="Test Case Icon" className="inline-block ml-2 w-8" /> */}
+                            <img
+                              src={result.length === 0 ? "/normal.png" : result[index] === true ? "/true.png" : "/false.png"}
+                              alt="Test Case Icon"
+                              className="inline-block ml-2 w-6 pb-1"
+                            />
+                          </h1>
+                          <div id={`testcase${index + 1}`} className="m-4">
+                            <div className="flex justify-between">
+                              {/* Input Field */}
+                              <div className="w-1/2 pr-44">
+                                <label htmlFor="input" className="font-bold">Input:</label>
+                                <pre className="w-full">{testcase.input}</pre>
+                              </div>
+
+                              {/* Output Field */}
+                              <div className="w-1/2 pl-44 pr-44">
+                                <label htmlFor="output" className="font-bold">Output:</label>
+                                <pre className="w-full">{testcase.output}</pre>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
                       </div>
                     ))}
                   </div>
-
-                  <form action="Case3" className=" dark:text-white  text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2">
-                  <h1>Test case 3</h1>
-                  <div id="testcase3"  className="m-4">
-                    <div className="flex justify-between">
-                    <div className="w-1/2">
-                      {/* Input Field */}
-                      {/* <label htmlFor="input" className="font-bold">Input:</label>
-                      <input
-                        type="text"
-                        id="input"
-                        name="input"
-                        className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
-                      />
-                    </div>
-
-                    <div className="w-1/2 pl-2">
-                      {/* Output Field */}
-                      {/* <label htmlFor="output" className="font-bold">Output:</label>
-                      <input
-                        type="text"
-                        id="output"
-                        name="output"
-                        className="w-full border border-gray-300 rounded p-2 mt-2 text-black"
-                      />
-                    </div>
-                    </div>
-                  </div>
-                  </form>
-
-                // </TabsContent> */}
-
-<TabsContent value="testcases">
-  <h1 className="text-3xl m-2 dark:text-white">Example Testcases</h1>
-  <div id="testcases" className="m-4">
-    {problemData.test_cases?.map((testcase, index) => (
-      <div key={index} className="flex justify-between">
-        <form action="Case3" className="dark:text-white text-black p-6 rounded border border-light_theme dark:border-dark_theme m-2">
-          <h1>
-            Test case {index + 1}
-            {/* <img src="normal.png" alt="Test Case Icon" className="inline-block ml-2 w-8" /> */}
-            <img
-              src={result.length === 0 ? "/normal.png" : result[index] === true ? "/true.png" : "/false.png"}
-              alt="Test Case Icon"
-              className="inline-block ml-2 w-6 pb-1"
-            />
-            </h1>
-          <div id={`testcase${index + 1}`} className="m-4">
-            <div className="flex justify-between">
-              {/* Input Field */}
-              <div className="w-1/2 pr-44">
-                <label htmlFor="input" className="font-bold">Input:</label>
-                <pre className="w-full">{testcase.input}</pre>
-              </div>
-
-              {/* Output Field */}
-              <div className="w-1/2 pl-44 pr-44">
-                <label htmlFor="output" className="font-bold">Output:</label>
-                <pre className="w-full">{testcase.output}</pre>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    ))}
-  </div>
-</TabsContent>
-
+                </TabsContent>
               </div>
             </Tabs>
           </div>
@@ -302,4 +271,4 @@ function Test({ params }) {
   );
 }
 
-export default Test;
+export default withAuth(Test);

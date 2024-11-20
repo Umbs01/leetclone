@@ -1,11 +1,12 @@
 "use client";
+import Image from "next/image";
 
 export default function ProfileCard({ profile }) {
   return (
     <div className="dark:bg-[#282828] dark:text-white p-6 rounded-lg shadow-lg h-full flex flex-col justify-center">
       {/* Profile Image */}
       <div className="flex justify-center mb-4">
-        <div className="h-24 w-24 rounded-full bg-gray-600"></div>
+        <Image src={"/profile_pic.png"} alt="User" width={100} height={100} className='rounded-full' />
       </div>
 
       {/* Username and Rank */}

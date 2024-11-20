@@ -13,7 +13,7 @@ export default function withAuth(Component) {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        router.push("/login");
+        router.push("/");
       } else {
         setAuthenticated(true);
       }

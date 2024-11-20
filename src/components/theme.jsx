@@ -63,7 +63,6 @@ const Theme = () => {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('admin', 'arhway');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');

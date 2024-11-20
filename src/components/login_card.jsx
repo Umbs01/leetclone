@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginCard() {
@@ -8,9 +8,17 @@ export default function LoginCard() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/question");
+    } else {
+      console.log("No token found");
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password)
 
     const requestBody = {
       email: email,
@@ -29,7 +37,7 @@ export default function LoginCard() {
         const data = await response.json();
         alert("Login successful: Redirecting to home page");
         localStorage.setItem("token", data.token);
-        router.push("/"); // Redirect to home page
+        router.push("/question");
 
       } else {
         const errorData = await response.json();
