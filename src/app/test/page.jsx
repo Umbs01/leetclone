@@ -1,5 +1,5 @@
 'use client';
-import Playground from "@/components/playground";
+import Playground from "@/components/playground_problem";
 import Button from "@/components/button";
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
