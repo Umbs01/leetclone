@@ -113,7 +113,7 @@ function UpdateQuestion() {
   useEffect(() => {
     const fetchQuestionData = async () => {
       try {
-        const response = await fetch(`http://161.246.5.48:3777/problems/${params.id}`);
+        const response = await fetch(`http://161.246.5.48:3777/problems/${params.problem_id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch question data');
         }
@@ -153,10 +153,10 @@ function UpdateQuestion() {
       }
     };
 
-    if (params.id) {
+    if (params.problem_id) {
       fetchQuestionData();
     }
-  }, [params.id]);
+  }, [params.problem_id]);
 
   const handleUpdate = async () => {
     if (triggerValidation()) {
@@ -195,7 +195,7 @@ function UpdateQuestion() {
           starter: starterCode
         };
 
-        const response = await fetch(`http://161.246.5.48:3777/problems/update/${params.id}`, {
+        const response = await fetch(`http://161.246.5.48:3777/problems/update/${params.problem_id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -208,7 +208,7 @@ function UpdateQuestion() {
         }
 
         alert('Question updated successfully!');
-        router.push('/problems'); // Optional: redirect after successful update
+        router.push('/question'); // Optional: redirect after successful update
       } catch (error) {
         console.error('Error updating question:', error);
         alert('Failed to update question: ' + error.message);
@@ -225,7 +225,7 @@ function UpdateQuestion() {
         throw new Error("No token found");
       }
 
-      const response = await fetch(`http://161.246.5.48:3777/problems/delete/${params.id}?token=${token}`, {
+      const response = await fetch(`http://161.246.5.48:3777/problems/delete/${params.problem_id}?token=${token}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
