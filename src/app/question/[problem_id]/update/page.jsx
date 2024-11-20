@@ -254,7 +254,7 @@ function UpdateQuestion() {
       }
 
       alert('Problem deleted successfully!');
-      router.push('/problems');
+      router.push('/question');
     } catch (error) {
       console.error('Error deleting problem:', error);
       alert('Failed to delete problem: ' + error.message);

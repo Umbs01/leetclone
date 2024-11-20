@@ -167,17 +167,17 @@ function CreateProblem() {
   } = useProblemFormValidation(descriptionData, testcaseData, solutionCode);
 
     // Check if user is admin
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     const decoded = jwtDecode(token);
-  //     const admin_role = decoded.role;
-  //     if (admin_role !== "admin") {
-  //       alert("Only admin can access this page");
-  //       router.push("/question");
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      const admin_role = decoded.role;
+      if (admin_role !== "admin") {
+        alert("Only admin can access this page");
+        router.push("/question");
+      }
+    }
+  }, []);
 
   const handleSubmit = async () => {
     if (triggerValidation()) {

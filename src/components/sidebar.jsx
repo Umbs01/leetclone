@@ -6,16 +6,28 @@ import Theme from "../components/theme";
 import { FaCode } from "react-icons/fa6";
 import { useEffect } from "react";
 import { GoPerson } from "react-icons/go";
+import { jwtDecode } from "jwt-decode";
 
 const Sidebar = () => {
     useEffect(() => {
-        const name = localStorage.getItem('admin');
-        const testcaseElement = document.getElementById("create_problem");
-        
-        if (testcaseElement) {
-            testcaseElement.style.display = name === "arhway" ? "flex" : "none";
+    const token = localStorage.getItem('token'); 
+    
+    if (token) {
+        try {
+            const decodedToken = jwtDecode(token); 
+            const isAdmin = decodedToken.role === 'admin'; 
+            const testcaseElement = document.getElementById("create_problem");
+
+            if (testcaseElement) {
+                testcaseElement.style.display = isAdmin ? "flex" : "none"; 
+            }
+        } catch (error) {
+            console.error('Invalid token:', error); 
         }
-    }, []);
+    } else {
+        console.log('No token found in localStorage');
+    }
+}, []);
     
     return (
         <div className="text-white pt-8">
