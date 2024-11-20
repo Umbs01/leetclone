@@ -41,7 +41,7 @@ export default function LoginCard() {
 
       } else {
         const errorData = await response.json();
-        alert("Login failed: " + errorData);
+        alert(`Login failed: ${errorData.detail}. Please check your email and password`);
         console.error("Login Error: ", errorData);
       }
     } catch (error) {
